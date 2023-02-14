@@ -34,3 +34,7 @@ coverage
 frontend/scripts
 frontend/.travis
 coverage
+
+# Yalc is only for developing packages
+.yalc
+yalc.lock

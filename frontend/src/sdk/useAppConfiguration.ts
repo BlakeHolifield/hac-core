@@ -4,12 +4,14 @@ import { getWSTokenSubProtocols } from './wsConfigs';
 import { AppInitSDK } from '@openshift/dynamic-plugin-sdk-utils';
 import { pluginStore } from 'Sdk/createStore';
 import useChrome from '@redhat-cloud-services/frontend-components/useChrome';
+import { WorkspaceLoader } from '../Utils/WorkspaceLoader';
 
 type AppConfigurations = React.ComponentProps<typeof AppInitSDK>['configurations'];
 
 const useAppConfiguration = (): AppConfigurations | null => {
   const { auth } = useChrome();
   const [appConfigurations, setAppConfigurations] = React.useState<AppConfigurations | null>(null);
+  const { activeWorkspace } = React.useContext(WorkspaceLoader);
 
   React.useEffect(() => {
     if (auth && !appConfigurations) {
@@ -35,7 +37,7 @@ const useAppConfiguration = (): AppConfigurations | null => {
         pluginStore,
       });
     }
-  }, [appConfigurations, auth]);
+  }, [appConfigurations, auth, activeWorkspace]);
 
   return appConfigurations;
 };

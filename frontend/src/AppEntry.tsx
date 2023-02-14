@@ -6,9 +6,12 @@ import App from './App';
 import logger from 'redux-logger';
 import { InitializeSDK } from './sdk';
 import { getBaseName } from '@redhat-cloud-services/frontend-components-utilities/helpers';
+import { useWorkspace } from '@openshift/dynamic-plugin-sdk-utils';
+import { WorkspaceLoader } from './Utils/WorkspaceLoader';
 
 const AppEntry = () => {
   const registry = process.env.NODE_ENV !== 'production' ? init(logger) : init();
+  const [workspace, setWorkspace] = useWorkspace();
   return (
     <RegistryContext.Provider
       value={{
@@ -16,6 +19,12 @@ const AppEntry = () => {
       }}
     >
       <Provider store={registry.getStore()}>
+        <WorkspaceLoader.Provider
+          value={{
+            setActiveWorkspace: setWorkspace,
+            activeWorkspace: workspace,
+          }}
+        ></WorkspaceLoader.Provider>
         <InitializeSDK>
           <Router basename={getBaseName(window.location.pathname, 0)}>
             <App />
